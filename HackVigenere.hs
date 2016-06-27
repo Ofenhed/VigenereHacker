@@ -10,6 +10,10 @@ import Data.Char (chr)
 import Debug.Trace
 import Numeric (readHex)
 
+printDescription = do
+  putStrLn "Usage: Input the text to hack. The program will list suggestions for the key length based on the input data. You will have to decide which key length to use."
+  putStrLn "For every character that looks out of place, input the 1-indexed index of that character until the data looks good. If you can't make it look good, restart the program and try another key length. When the data looks good, enter 0 to print the result in an easy to read way."
+
 characterFrequency string = runSTArray $ do
   arr <- newArray (0, 255) 0
   mapM_ (\x -> do
@@ -103,6 +107,7 @@ findCorrectKey keys encryptedData ignoreList = do
     else findCorrectKey keys encryptedData (replaceNth changeIndex ((ignoreList !! changeIndex) + changeBy) ignoreList)
 
 main = do
+  printDescription
   putStrLn "Input the data to hack in hex encoding"
   encryptedData_ <- getLine
   let encryptedData  = hexToBin encryptedData_
